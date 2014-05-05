@@ -104,7 +104,7 @@ function updateInfo () {
 				notify();
 		}
 	});
-	timer = setTimeout(updateInfo, 60000);
+	timer = setTimeout(updateInfo, 15 * 60 * 1000);
 }
 
 function getCurrent(callback) {
