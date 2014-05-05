@@ -6,6 +6,7 @@
 
     "permissions": [
          "http://stat.rn/*",
+         "http://kanban.rn/*",
          "http://coldfs/*",
          "storage"
 
