@@ -1,0 +1,24 @@
+{
+    "manifest_version": 2,
+
+    "name": "НГС.Статистика",
+    "version": "1.0",
+
+    "permissions": [
+         "http://stat.rn/*",
+         "http://coldfs/*",
+         "storage"
+
+    ],
+    "background": {
+        "scripts": ["jquery-1.11.1.min.js","mystat.js"],
+        "pages": ["background.htm"],
+        "persistent": true
+    },
+    "options_page": "options.htm",
+    "browser_action": {
+        "default_title": "Показать статистику",
+        "default_icon": "icon.png",
+        "default_popup": "popup.html"
+    }
+}

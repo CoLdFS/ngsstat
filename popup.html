@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript" src="jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="popup.js"></script>
+    <title></title>
+</head>
+<body style="width:200px">
+    <h3>НГС.Статистика</h3>
+    <div id="noname" style="display:none">Укажите имя пользователя в настройках<br><a href="refresh">Обновить</a></div>
+	<div id="mainapp">
+	    <div id="loading">Загрузка данных</div>
+	    <div id="result" style="display:none">
+		    Сегодня: <span id="today"></span><br/>
+		    В этом месяце: <span id="month"></span>
+			<div class="actions">
+				<a href="more">Подробнее</a>
+				<a href="refresh">Обновить</a>
+			</div>
+			<div id="more" style="display:none"></div>
+		</div>
+	</div>
+</body>
+</html>
