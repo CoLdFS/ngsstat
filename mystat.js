@@ -1,4 +1,23 @@
-var options = {login: '', hours: 168, money: 0};
+var options = {
+		login: '',
+		hours: 168,
+		money: 0
+	},
+	timer,
+	lastIssue = {
+		'issue': 'UNKNOWN',
+		'unlogged': 0,
+	},
+	cur = {
+		log: [],
+		sum: 0,
+		today: 0,
+		progress: 0,
+		need: 0,
+		money:0,
+		left: 0
+	};
+
 function updateOptions(callback) {
 	chrome.storage.sync.get({
 		"login": '',
@@ -9,15 +28,10 @@ function updateOptions(callback) {
 		callback();
 	});
 }
-var timer;
-var lastIssue = {
-	'issue': 'UNKNOWN',
-	'unlogged': 0,
-}
-var cur = {log: [], sum: 0, today: 0, progress: 0, need: 0, money:0, days: 0};
 
-
+// End of the world after 31.12.2014
 function getlastMonthDay(month) {
+	
 	var d = new Date(2014, month, 0);
 	return d.getDate();
 }
@@ -35,18 +49,18 @@ function getLeftWorkDays(month, day) {
 	}
 
 	var maxday = getlastMonthDay(month);
-	var leftweekends = weekends.hasOwnProperty(month) ? weekends[month].filter(function(el) {return el>day}) : [];
+	var leftweekends = weekends.hasOwnProperty(month) ? weekends[month].filter(function(el) {return el > day}) : [];
 	var totaldays = maxday - day;
 	return totaldays - leftweekends.length;
 
 }
 
-
 function secondsToHours(seconds) {
 	return (seconds/60/60);
 }
-function error(message, block) {
 
+function error(message, block) {
+	// Надо бы как-то отобразить ошибки
 }
 
 function calcRate() {
@@ -54,12 +68,13 @@ function calcRate() {
 	dd = today.getDate(),
 	mm = today.getMonth() + 1, //January is 0!
 	left = getLeftWorkDays(mm, dd),
-	hours = parseInt(options.hours) - parseFloat(cur.sum) - cur.progress;
+
+	hours = parseInt(options.hours) - (parseFloat(cur.sum) - cur.today);
 
 	if (hours < 0) {
 		cur.need = 0;
 	} else {
-		cur.need = hours/left;
+		cur.need = hours/(left + 1);
 	}
 	cur.left = left;
 	cur.money = (cur.sum + cur.progress) * options.money;
@@ -159,13 +174,14 @@ function getMonthStat(callback) {
 
 	today = dd + '.' + mm;
 
-	//today = '30.05';
 	if (mm == '12') {
 		url = 'http://stat.rn/ajax/user_stat.php?user=' + options.login + '&period='+ (yyyy) +'-' + mm + '%3B'+ (yyyy + 1) +'-01';
 	} else {
 		url = 'http://stat.rn/ajax/user_stat.php?user=' + options.login + '&period='+ yyyy +'-' + mm + '%3B'+ yyyy +'-' + (mm2) + '';
 	}
 
+	//For local testing
+	//today = '30.05';
 	//url = 'http://coldfs/myngs/user_stat.php.htm';
 
 	$.get(url, function(res) {
@@ -185,80 +201,8 @@ function getMonthStat(callback) {
 	}, 'html');
 }
 
-function getData(callback) {
-
-	if (cur.username == '') {
-		chrome.browserAction.setBadgeText ( { text: '' } );
-
-		if (callback) {
-			callback();
-		}
-		return;
-	}
-	var today = new Date(),
-		dd = today.getDate(),
-		mm = today.getMonth() + 1, //January is 0!
-		yyyy = today.getFullYear();
-
-	if (dd < 10) {
-		dd = '0' + dd
-	} 
-
-	var mm2 = mm + 1;
-
-	if (mm < 10) {
-		mm ='0' + mm
-	} 
-
-	if (mm2 < 10) {
-		mm2 ='0' + mm2
-	} 
-	today = dd + '.' + mm;
-
-	var url;
-	
-	if (mm == '12') {
-		url = 'http://stat.rn/ajax/user_stat.php?user=' + cur.username + '&period='+ (yyyy) +'-' + mm + '%3B'+ (yyyy + 1) +'-01';
-	} else {
-		url = 'http://stat.rn/ajax/user_stat.php?user=' + cur.username + '&period='+ yyyy +'-' + mm + '%3B'+ yyyy +'-' + (mm2) + '';
-	}
-	
-	//url = 'http://coldfs/myngs/user_stat.php.htm';
-
-	$.get(url, function(res){
-		$('#temp').html(res);
-		var log = {}, sum = 0;
-		$('#temp tbody tr:even').each(function(i, el) {
-			var a = [];
-			$(el).find('td').each(function(j, el2) {
-				a.push($.trim($(el2).text()));
-			});
-			log[a.shift()] = parseFloat(a[0]);
-			sum = sum +  parseFloat(a[0]);
-		});
-		cur = {online: true, log: log, sum: sum, today: log.hasOwnProperty(today) ? log[today]: 0, username: cur.username};
-		chrome.browserAction.setBadgeText ( { text: cur.today.toFixed(1) } );
-		if (callback) {
-			callback();
-		}		
-	}, 'html');
-}
-
-
-function update(callback) {
-	chrome.storage.sync.get({
-		login: '',
-	}, function(items) {
-		setUsername(items.login);
-		getData(callback);
-	});
-}
-
 function getInfo(){
 	return cur;
-}
-function setUsername(name) {
-	cur.username = name;
 }
 
 $(function() {
@@ -275,7 +219,4 @@ $(function() {
 			}
 		})
 	});
-	// setInterval(function() {
-	// 	update();
-	// }, 15 * 60 * 1000); //обновляем раз в 15 минут  
 });
