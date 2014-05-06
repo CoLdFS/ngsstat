@@ -109,7 +109,7 @@ function updateInfo () {
 
 function getCurrent(callback) {
 	//var url = 'http://coldfs/myngs/in-progress';
-	var url = 'kanban.rn/ngs/api/my/in-progress/';
+	var url = 'http://kanban.rn/ngs/api/my/in-progress/';
 
 	$.get(url, function(result) {
 		if (result.issues) {
