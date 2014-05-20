@@ -40,7 +40,7 @@ function draw() {
 		$("#bar #overtime").width(100*(1 - percent)+"%");
 	} else {
 		$("#bar #overtime").hide();
-		$("#bar #main").width(100+"%");
+		$("#bar #main").width(98+"%");
 	}
 
 	drawLog(log.log);
