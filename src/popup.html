@@ -4,23 +4,44 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<script type="text/javascript" src="jquery-1.11.1.min.js"></script>
 	<script type="text/javascript" src="popup.js"></script>
+	<link href="popup.css" rel="stylesheet">
     <title></title>
 </head>
 <body style="width:200px">
     <h3>НГС.Статистика</h3>
-    <div id="noname" style="display:none">Укажите имя пользователя в настройках<br><a href="refresh">Обновить</a></div>
+    <div id="noname" style="display:none">
+		<p>Укажите имя пользователя в настройках</p>
+		<a href="refresh">Обновить</a>
+	</div>
 	<div id="mainapp">
 	    <div id="loading">Загрузка данных</div>
-	    <div id="result" style="display:none">
-		    Сегодня: <span id="today"></span><br/>
-		    В этом месяце: <span id="month"></span><br/>
-		    До конца месяца <span id="left"></span> рабочих дней<br/>
-		    <span id="need"></span><br/>
 
+	    <div id="result" style="display:none">
+			<div class="content">
+				<div class="dayly-wrapper">
+					<div id="today" class="worktime">
+						<span id="today-text">
+					</div>
+					<div id="dayly" class="dayly-meter">
+						<meter id="dayly-meter" value=0 max=12 high=8></meter>
+					</div>
+				</div>
+				<div id="bar" class="bar">
+					<meter id="main"></meter>
+					<meter id="overtime" value=10 max=10 high=8 style="display: none"></meter>
+				</div>
+				<div id="money">
+					<b>$&nbsp;</b><span id="money-text"></span>
+				</div>
+			</div>
 			<div class="actions">
 				<a href="more">Подробнее</a>
 				<a href="refresh">Обновить</a>
 			</div>
+
+			<div class="popup" id="dayly-need" style="display: none"><p>В месяце осталось <span id="days"><span>. Необходимо отработывать по <span id="need"></span>.</p></div>
+			<div class="popup" id="month-progress" style="display: none"><p><span id="hours-now"></span> / <span id="hours-total"></span></p></div>
+
 			<div id="more" style="display:none"></div>
 		</div>
 	</div>
