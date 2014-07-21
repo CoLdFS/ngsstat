@@ -1,0 +1,9 @@
+@wip
+Feature: Новая тру фича
+
+  Write a description of your feature here.
+
+  Scenario: New scenario
+    Given ...
+    When ...
+    Then ...
