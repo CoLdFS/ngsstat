@@ -99,6 +99,7 @@ function updateInfo () {
 		clearTimeout(timer);
 		timer = 0;
 	}
+	updateOptions();
 
 	getCurrent(function(type, progress) {
 		switch(type) {
